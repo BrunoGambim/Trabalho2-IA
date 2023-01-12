@@ -5,6 +5,8 @@ from ..othello.gamestate import GameState
 
 import math
 
+from threading import Thread
+
 # Voce pode criar funcoes auxiliares neste arquivo
 # e tambem modulos auxiliares neste pacote.
 #
@@ -48,17 +50,23 @@ static_weights = [
     [4,-3,2,2,2,2,-3,4]
 ]
 
+COIN_PARITY_OFFSET = 4
+
 def evaluate_state(state: GameState) -> int:
+    global PLAYER
     v = 0
     for x in range(0, len(static_weights)):
-        for y in range(0, len(static_weight[x])):
+        for y in range(0, len(static_weights[x])):
             if state.board.tiles[x][y] == PLAYER:
-                v = static_weights[x][y]
+                v = static_weights[x][y] + COIN_PARITY_OFFSET
             else:
-                v = -static_weights[x][y]
+                v = -static_weights[x][y] - COIN_PARITY_OFFSET
     return v
 
 def MAX(state: GameState, alpha: int, beta: int, height: int) -> int:
+    if STOP:
+        return 0
+        
     if state.is_terminal() or height == 0:
         return evaluate_state(state)
     
@@ -75,6 +83,8 @@ def MAX(state: GameState, alpha: int, beta: int, height: int) -> int:
 
 
 def MIN(state: GameState, alpha: int, beta: int, height: int) -> int:
+    if STOP:
+        return 0
     if state.is_terminal() or height == 0:
         return evaluate_state(state)
     
@@ -95,7 +105,7 @@ def MAX_ROOT(state: GameState, alpha: int, beta: int, height: int) -> Tuple[int,
     v = -math.inf
 
     best_successor = None
-
+    
     for successor in state.board.legal_moves(state.player):
         minimized = MIN(state.next_state(successor), alpha, beta, height - 1)
         if minimized > v:
@@ -104,12 +114,30 @@ def MAX_ROOT(state: GameState, alpha: int, beta: int, height: int) -> Tuple[int,
         alpha = max(alpha, v)
         if alpha >= beta:
             break
-    
+        
     return best_successor
 
+STATE = None
+RESULT = None
 
+MAX_DEPTH = 100
+
+STOP = False
+
+
+def a_b_pruning():
+    global PLAYER, STATE, RESULT, MAX_DEPTH, STOP
+    for x in range(5, MAX_DEPTH):
+        maximized_root = MAX_ROOT(STATE, -math.inf, +math.inf, x)
+        if STOP:
+            return
+        RESULT = maximized_root
 
 def make_move(state: GameState) -> Tuple[int, int]:
+    global STATE, RESULT, MAX_DEPTH, PLAYER, STOP
+    RESULT = None
+    STATE = state
+    STOP = False
     """
     Returns an Othello move
     :param state: state to make the move
@@ -119,5 +147,17 @@ def make_move(state: GameState) -> Tuple[int, int]:
     # a primeira jogada com as pretas.
     # Remova-o e coloque a sua implementacao da poda alpha-beta
     PLAYER = state.player
-    return MAX_ROOT(state, -math.inf, +math.inf, 5)
+    
+
+    thread = Thread(target=a_b_pruning)
+    
+
+    
+    
+    thread.start()
+    thread.join(4)
+    STOP = True
+    thread.join()
+
+    return RESULT
 
