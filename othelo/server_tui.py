@@ -165,7 +165,7 @@ class Server(object):
             # calls current player's make_move function with the specified timeout
             function_call = timer.FunctionTimer(self.player_modules[current_player].make_move, (state_copy,))  # argument must be a 1-element tuple
             
-            delay = 60 if player_name(self.player_dirs[current_player]) == "humanplayer" else self.delay
+            delay = 60 if self.player_dirs[current_player] == "advsearch.humanplayer" else self.delay
             move_xy = function_call.run(delay)      # move in x,y coordinates (human convention)
 
             # checks for timeout

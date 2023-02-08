@@ -8,15 +8,14 @@ O kit contém os seguintes arquivos (todos os `__init__.py` estao omitidos):
 kit_othello
 |-- advsearch
 |   |-- othello
-|   |   |-- board.py       <-- encapsula o tabuleiro
-|   |   \-- gamestate.py   <-- encapsula um estado do jogo (config. do tabuleiro e cor que joga)
+|   |   \-- board.py
 |   |-- randomplayer
 |   |   \-- agent.py       <-- agente que joga aleatoriamente
 |   |-- humanplayer        
 |   |   \-- agent.py       <-- agente para um humano jogar 
 |   |-- timer.py           <-- funcoes auxiliares de temporizacao
 |   \-- your_agent         <-- renomeie este diretorio c/ o nome do seu agente (pode adicionar outros arquivos aqui se precisar)
-|       \-- agent.py       <-- preencha o make_move aqui 
+|       |-- agent.py       <-- preencha o make_move aqui 
 |-- server.py
 |-- server_tui.py
 \-- test_agent.py          <-- teste o funcionamento basico do seu agente (pode adicionar outros casos de teste)
@@ -24,7 +23,7 @@ kit_othello
 
 
 ## Requisitos 
-O servidor foi testado em uma máquina GNU/Linux com o interpretador python 3.9.7.
+O servidor foi testado em uma máquina GNU/Linux com o interpretador python 3.7.
 
 Outras versões do interpretador python ou sistema operacional podem funcionar, mas não foram testados.
 
@@ -66,12 +65,13 @@ Para jogar com ele, utilize os mesmo passos do jogador 'random', trocando o play
 
 ## Funcionamento 
 
-Iniciando pelo primeiro jogador, que jogará com as peças pretas, o servidor chama a função `make_move(state)` do seu `agent.py`. A função recebe `state`, um objeto da classe `GameState` que contém um tabuleiro (objeto da classe `Board` e o jogador a fazer a jogada (um caractere) (`B` para as pretas ou `W` para as brancas). Para os detalhes, veja `othello/gamestate.py` e `othello/board.py`.
+Iniciando pelo primeiro jogador, que jogará com as peças pretas, o servidor chama a função `make_move(board, color)` do seu `agent.py`. A função recebe `board`, um objeto da classe `Board` e `color`, um caractere indicando a cor com a qual a jogada deve ser feita (‘B’ para as pretas ou ‘W’ para as brancas). Veja no `othello/board.py`.
 
-O servidor então espera o delay e recebe a tupla (x,y) com coluna e linha com a jogada do jogador. O servidor processa a jogada, exibe o novo estado no terminal e passa a vez para o próximo jogador, repetindo esse ciclo até o fim do jogo.
 
-No fim do jogo, o servidor exibe a pontuação de cada jogador e cria um arquivo `results.xml`.
-com todas as jogadas tentadas pelos jogadores (inclusive as ilegais). Um arquivo `history.txt` também contém as jogadas, e esse é criado mesmo que a partida seja interrompida no meio (e.g. crash de um agente).
+O servidor então espera o delay e recebe a tupla (x,y) com coluna e linha com a jogada do jogador. O servidor processa a jogada, exibe o novo estado no terminal e passa a vez pro oponente, repetindo esse ciclo até o fim do jogo.
+
+No fim do jogo, o servidor exibe a pontuação de cada jogador e cria um arquivo history.txt
+com todas as jogadas tentadas pelos jogadores (inclusive as ilegais).
 
 Em um objeto da classe `Board`, o atributo `tiles` contém a representação do tabuleiro como uma matriz de caracteres (ou lista de strings ;). `W` representa uma peça branca (white), `B` uma peça preta (black) e `.` (ponto) representa um espaço livre. No exemplo a seguir, temos a representação do estado inicial de Othello. 
 
