@@ -29,6 +29,10 @@ import agents.agent17.agent as agent_17
 import agents.agent18.agent as agent_18
 import agents.agent19.agent as agent_19
 import agents.agent20.agent as agent_20
+import agents.agent21.agent as agent_21
+import agents.agent22.agent as agent_22
+import agents.agent23.agent as agent_23
+import agents.agent24.agent as agent_24
 import agents.agent1.mobility_tables as mobility_tables_1
 import agents.agent2.mobility_tables as mobility_tables_2
 import agents.agent3.mobility_tables as mobility_tables_3
@@ -45,6 +49,10 @@ import agents.agent13.mobility_tables as mobility_tables_13
 import agents.agent14.mobility_tables as mobility_tables_14
 import agents.agent15.mobility_tables as mobility_tables_15
 import agents.agent16.mobility_tables as mobility_tables_16
+import agents.agent17.mobility_tables as mobility_tables_17
+import agents.agent18.mobility_tables as mobility_tables_18
+import agents.agent19.mobility_tables as mobility_tables_19
+import agents.agent20.mobility_tables as mobility_tables_20
 
 import random
 
@@ -148,42 +156,63 @@ def game(agent1, agent2, queue, state_points):
     state = state_points[0]
     points = state_points[1]
 
-    fixed_agent = [agent_13, agent_14, agent_15, agent_16]
-    fixed_m3_agent = [agent_17, agent_18, agent_19, agent_20]
+    fixed_agent = [agent_13, agent_14, agent_15, agent_16, agent_17, agent_18, agent_19, agent_20]
+    fixed_m3_agent = [agent_21, agent_22, agent_23, agent_24]
     agents = [agent_1, agent_2, agent_3, agent_4, agent_5, agent_6,agent_7, agent_8, agent_9, agent_10, agent_11, agent_12]
     result = 0
     value = (3, 0, 0)
     while value[0] == 3:
         value = run(fixed_agent[agent1], agents[agent2], state.board, state.player)
-    """if value == 1:
-        result -= 2*points
-    elif value == 2:
-        result -= 1*points"""
-    result -= value[2]
     print("end of the game", agent2, value)
+
+    if value[0] == 1:
+        result -= 2*points
+    elif value[0] == 2:
+        result -= 1*points
+    result -= value[2]
 
     value = (3, 0, 0)
     while value[0] == 3:
         value = run(agents[agent2], fixed_agent[agent1], state.board, state.player)
-    """if value == 0:
-        result -= 2*points
-    elif value == 2:
-        result -= 1*points"""
-    result -= value[1]
     print("end of the game", agent2, value)
     
+    if value[0] == 0:
+        result -= 2*points
+    elif value == 2:
+        result[0] -= 1*points
+    result -= value[1]
+    
+    value = (3, 0, 0)
+    while value[0] == 3:
+        value = run(fixed_agent[agent1+4], agents[agent2], state.board, state.player)
+    print("end of the game", agent2, value)
+
+    if value[0] == 1:
+        result -= 2*points
+    elif value[0] == 2:
+        result -= 1*points
+    result -= value[2]
+
+    value = (3, 0, 0)
+    while value[0] == 3:
+        value = run(agents[agent2], fixed_agent[agent1+4], state.board, state.player)
+    print("end of the game", agent2, value)
+    
+    if value == 0:
+        result -= 2*points
+    elif value == 2:
+        result -= 1*points
+    result -= value[1]
+
     value = (3, 0, 0)
     while value[0] == 3:
         value = run(fixed_m3_agent[agent1], agents[agent2], state.board, state.player)
     print("end of the game", agent2, value)
 
-    """
     if value[0] == 1:
-        print("vitoria", agent2)
         result -= 2*points
     elif value[0] == 2:
-        print("empate", agent2)
-        result -= 1*points"""
+        result -= 1*points
     
     result -= value[2]
     
@@ -191,16 +220,14 @@ def game(agent1, agent2, queue, state_points):
     while value[0] == 3:
         value = run(agents[agent2], fixed_m3_agent[agent1], state.board, state.player)
     print("end of the game", agent2, value)
-    """
+    
     if value[0] == 0:
-        print("vitoria", agent2)
         result -= 2*points
     elif value[0] == 2:
-        print("empate", agent2)
-        result -= 1*points"""
+        result -= 1*points
     result -= value[1]
     
-    print("fim", agent2, result)
+    print("end", agent2, result)
     queue.put(result)
 
 AGENTES_NA_RODADA = 4
@@ -216,27 +243,42 @@ def create_random_state(height):
 
 
 def start_learning():
-    inital_vars = [ 13.26624121,  -2.15330555,   7.98142546,   0.86147208,
-       -14.33692948,  -5.19374529,  -2.25052133,   6.80119674,
-         2.30210902,   2.31156192,  -0.12208649,  13.0689021 ,
-        10.6203269 ]
+    inital_vars = [26.4182921 ,  3.61579667, 16.91354517,  5.44322345, -9.01984636,
+       -9.50027461,  0.62327498,  7.08086365,  1.54969233, -1.9107416 ,
+        0.24364641, 10.95576195, 11.03142108]
 
     es = cma.CMAEvolutionStrategy(inital_vars, 2.5)
-
 
     tc.compileTable(12, inital_vars)
     tc.compileTable(13, inital_vars)
     tc.compileTable(14, inital_vars)
     tc.compileTable(15, inital_vars)
 
+    inital_vars = [ 7.05768493,  -3.06950816,  20.28649562,  17.80472943,
+       -17.18915982,  -3.232369  ,   9.94448214,  10.76341517,
+         1.56880036,  11.01158384,   8.76674825,  12.25736147,
+        20.77311774]
+    tc.compileTable(16, inital_vars)
+    tc.compileTable(17, inital_vars)
+    tc.compileTable(18, inital_vars)
+    tc.compileTable(19, inital_vars)
+
     importlib.reload(mobility_tables_13)
     importlib.reload(mobility_tables_14)
     importlib.reload(mobility_tables_15)
     importlib.reload(mobility_tables_16)
+    importlib.reload(mobility_tables_17)
+    importlib.reload(mobility_tables_18)
+    importlib.reload(mobility_tables_19)
+    importlib.reload(mobility_tables_20)
     importlib.reload(agent_13)
     importlib.reload(agent_14)
     importlib.reload(agent_15)
     importlib.reload(agent_16)
+    importlib.reload(agent_17)
+    importlib.reload(agent_18)
+    importlib.reload(agent_19)
+    importlib.reload(agent_20)
 
     for generation in range(50):
         result = [0,0,0,0,0,0,0,0,0,0,0]

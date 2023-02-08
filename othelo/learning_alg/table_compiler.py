@@ -49,8 +49,8 @@ def write_tables(tables, mtt_id):
             add_value = "    tables[%d].insert(%d, %f)\n" % (i, key, value)
             result = result + add_value
     result = result + "    return tables"
-    os.remove("torneio/participantes/partse_tung"+str(mtt_id+1)+"/mobility_tables.py")
-    f = open("torneio/participantes/partse_tung"+str(mtt_id+1)+"/mobility_tables.py", "a")
+    os.remove("learning_alg/agents/agent"+str(mtt_id+1)+"/mobility_tables.py")
+    f = open("learning_alg/agents/agent"+str(mtt_id+1)+"/mobility_tables.py", "a")
     f.write(result)
     f.close()
 
@@ -170,7 +170,6 @@ def compute_value(el_list, weight_list, var, isSide):
     return result
 
 if __name__ == "__main__":
-    compileTable(20, [  3.12527589,  -5.03352007,  16.74624313,   9.90511826,
-       -13.98997544,  -1.76004592,  -0.4739546 ,   7.34371555,
-         0.44072023,  -1.4137888 ,   4.24019835,   6.17184922,
-        13.59629657])
+    compileTable(20, [26.4182921 ,  3.61579667, 16.91354517,  5.44322345, -9.01984636,
+       -9.50027461,  0.62327498,  7.08086365,  1.54969233, -1.9107416 ,
+        0.24364641, 10.95576195, 11.03142108])
