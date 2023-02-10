@@ -242,5 +242,4 @@ def make_move(state: GameState) -> Tuple[int, int]:
     if result[0] != None:
         return result[0]
     else:
-        print("deu ruim")
         return board.legal_moves(board.player)[0][0]
