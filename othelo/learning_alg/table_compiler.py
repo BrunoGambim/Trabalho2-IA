@@ -1,16 +1,16 @@
 import os
 def compileTable(mtt_id, var):
-    static_weights =    [[5*var[0], var[1], var[2], var[3], var[3], var[2], var[1], 5*var[0]],
-                        [ var[1], var[4], var[5], var[6], var[6], var[5], var[4], var[1]],
-                        [ var[2], var[5], var[7], var[8], var[8], var[7], var[5], var[2]],
-                        [ var[3], var[6], var[8], var[9], var[9], var[8], var[6], var[3]],
-                        [ var[3], var[6], var[8], var[9], var[9], var[8], var[6], var[3]],
-                        [ var[2], var[5], var[7], var[8], var[8], var[7], var[5], var[2]],
-                        [ var[1], var[4], var[5], var[6], var[6], var[5], var[4], var[1]],
-                        [ 5*var[0], var[1], var[2], var[3], var[3], var[2], var[1], 5*var[0]]]
+    static_weights =    [[5*var[0], 2*var[1], 2*var[2], 2*var[3], 2*var[3], 2*var[2], 2*var[1], 5*var[0]],
+                        [ 2*var[1], 2*var[4],   var[5],   var[6],   var[6],   var[5], 2*var[4], 2*var[1]],
+                        [ 2*var[2],   var[5],   var[7],   var[8],   var[8],   var[7],   var[5], 2*var[2]],
+                        [ 2*var[3],   var[6],   var[8],   var[9],   var[9],   var[8],   var[6], 2*var[3]],
+                        [ 2*var[3],   var[6],   var[8],   var[9],   var[9],   var[8],   var[6], 2*var[3]],
+                        [ 2*var[2],   var[5],   var[7],   var[8],   var[8],   var[7],   var[5], 2*var[2]],
+                        [ 2*var[1], 2*var[4],   var[5],   var[6],   var[6],   var[5], 2*var[4], 2*var[1]],
+                        [ 5*var[0], 2*var[1], 2*var[2], 2*var[3], 2*var[3], 2*var[2], 2*var[1], 5*var[0]]]
 
     tables =  [0] * 10
-
+    print(static_weights)
     counter = 0
     weight_lists =  [[],[],[],[],[0, 0, 0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0],[0, 0, 0, 0],[0, 0, 0]]
     for x in range(0, 4):
@@ -32,9 +32,9 @@ def compileTable(mtt_id, var):
 
     for counter in range(0, 10):
         if counter == 0:
-            tables[counter] = create_table(weight_lists[counter], [var[10], var[11]/10, var[12]], True)
+            tables[counter] = create_table(weight_lists[counter], [var[10], var[11]/10, 5*var[12]], True)
         else:
-            tables[counter] = create_table(weight_lists[counter], [var[10], var[11]/10, var[12]], False)
+            tables[counter] = create_table(weight_lists[counter], [var[10], var[11]/10, 5*var[12]], False)
 
     write_tables(tables, mtt_id)
 
@@ -170,6 +170,6 @@ def compute_value(el_list, weight_list, var, isSide):
     return result
 
 if __name__ == "__main__":
-    compileTable(20, [26.4182921 ,  3.61579667, 16.91354517,  5.44322345, -9.01984636,
-       -9.50027461,  0.62327498,  7.08086365,  1.54969233, -1.9107416 ,
-        0.24364641, 10.95576195, 11.03142108])
+    compileTable(24, [28.27258647,  4.04930245, 12.80152718, -0.03497124, -6.12316304,
+       -4.91674714, -3.37784906,  1.91556873,  8.0228682 , -5.54516959,
+        9.90333007, 15.60158598,  4.5172393 ])
